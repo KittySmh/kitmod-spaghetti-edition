@@ -129,7 +129,6 @@ class Helpcmd(commands.Cog):
      def check(reaction, user):
         return user == ctx.author
 
-     i = 0
      reaction = None
 
      while True:
@@ -149,9 +148,7 @@ class Helpcmd(commands.Cog):
             await message.edit(embed=pages[i])
 
         try:
-            reaction, user = await self.bot.wait_for('reaction_add',
-                                                   timeout=30.0,
-                                                   check=check)
+            reaction, user = await self.bot.wait_for('reaction_add',timeout=30.0,check=check)
             await message.remove_reaction(reaction, user)
         except:
             break

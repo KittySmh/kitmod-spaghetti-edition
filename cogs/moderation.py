@@ -216,14 +216,15 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
-    async def tmute(self, ctx, member: discord.Member, duration = None):
+    async def tmute(self, ctx, member: discord.Member, duration = None,*, reason):
      embed = discord.Embed(title = "User TimeMuted", description = f"{member.mention} has been timemuted for {duration}. ",timestamp=datetime.datetime.now(),colour=discord.Colour.red())
      embed.set_thumbnail(url=member.display_avatar)
      embed.add_field(name="Moderator:", value=f"{ctx.author}", inline=True)
+     embed.add_field(name="Reason",value=f"{reason}",inline=True)
      converter = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
      mutetime = int(duration[0]) * converter[duration[-1]]
      channel1 = discord.utils.get(ctx.guild.text_channels, name="mod-logs")
-     await ctx.send(f"{member.mention} has been placed on a timed hold for {duration}.")
+     await ctx.send(f"{member.mention} has been placed on a timed hold for {duration}. Reason: {reason}")
      muted_role = discord.utils.get(ctx.guild.roles, name="Muted")
      await member.add_roles(muted_role)
      await ctx.send(f"{member.mention} has been successfully placed on a timed hold.")
@@ -244,15 +245,16 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def tban(self, ctx, member: discord.Member, duration = None):
+    async def tban(self, ctx, member: discord.Member, duration = None,*,reason):
      embed = discord.Embed(title = "User TimeBanned", description = f"{member.mention} has been timebanned for {duration}. ",timestamp=datetime.datetime.now(),colour=discord.Colour.red())
      embed.set_thumbnail(url=member.display_avatar)
      embed.add_field(name="Moderator:", value=f"{ctx.author}", inline=True)
+     embed.add_field(name="Reason",value=f"{reason}",inline=True)
      channel1 = discord.utils.get(ctx.guild.text_channels, name="mod-logs")
      converter = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
      bantime = int(duration[0]) * converter[duration[-1]]
 
-     await ctx.send(f"{member.mention} has been placed on a timed ban for {duration}.")
+     await ctx.send(f"{member.mention} has been placed on a timed ban for {duration}. Reason: {reason}")
      await channel1.send(embed=embed)
      await member.ban()
      await ctx.send(f"{member.mention} has been successfully placed on a timed ban.")

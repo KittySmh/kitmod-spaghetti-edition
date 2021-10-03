@@ -45,7 +45,8 @@ async def reload(ctx, extension):
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
-        bot.load_extension(f'cogs.{filename[:-3]}')
+      bot.load_extension(f'cogs.{filename[:-3]}')
+        
 
 async def warninit():
     await bot.wait_until_ready()

@@ -13,19 +13,21 @@ class Giveaways(commands.Cog):
 
     @commands.command()
     @commands.has_role("Giveawayy")
-    async def gstart(self, ctx, mins: int, *, prize: str):
+    async def gstart(self, ctx, duration, *, prize: str):
+     converter = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
+     giveawaytime = int(duration[0]) * converter[duration[-1]]
      embed = discord.Embed(title="Giveaway! :tada:",
      description=f"{prize}",color=ctx.author.color)
 
     
 
-     embed.add_field(name="Ends In:", value=f"{mins} Seconds")
+     embed.add_field(name="Ends In:", value=f"{duration}")
 
      my_msg = await ctx.send(embed=embed)
      await my_msg.add_reaction("🎉")
      poopy = await ctx.send('||@here|| Active Giveaway Going on! :tada:')
     
-     await asyncio.sleep(mins)
+     await asyncio.sleep(giveawaytime)
 
      new_msg = await ctx.channel.fetch_message(my_msg.id)
 
@@ -35,7 +37,7 @@ class Giveaways(commands.Cog):
 
      winner = random.choice(users)
 
-     await ctx.send(f"Congratulations! {winner.mention} won {prize}! :tada:")
+     await ctx.send(f"Congratulations! {winner} won {prize}! :tada:")
      await poopy.edit(content='The Giveaway Has Ended. Tune in Next Time For More Exciting Giveaways!')
 
 

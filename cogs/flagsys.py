@@ -5,7 +5,7 @@ from discord.ext import commands
 class flagsys(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+ 
     
 
     @commands.command()
@@ -21,7 +21,8 @@ class flagsys(commands.Cog):
       if role in ctx.author.roles:
         embed=discord.Embed(title="Server Flags", description=f"{words}")
         await ctx.send(embed=embed)
-        return    
+        return
+           
 
       elif hidmod in ctx.author.roles:
         embed=discord.Embed(title="Server Flags", description=f"{words}")
@@ -33,6 +34,18 @@ class flagsys(commands.Cog):
           await ctx.reply("You do not have sufficient permissions to use this command.")  
           return  
     
+    @commands.command(aliases=["blw"])
+    async def blacklist(ctx, word):
+      if ctx.author.id == 484318483258015754:
+       while True:
+         with open("flagsystem.txt", "r+") as file:
+           await ctx.reply(f"The Word **{word}** has been added to **BadWords.txt**")
+           file.write(f"{word} ")
+           return
+
+      else:
+        await ctx.reply("You do not have sufficient permissions to use this command.")     
+
     @commands.command()    
     async def clearflags(self,ctx):
      if ctx.author.id == 484318483258015754:

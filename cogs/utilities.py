@@ -64,7 +64,7 @@ class Utilities(commands.Cog):
      await ctx.send(ctx.channel.mention + " has been **Unlocked** :unlock:")
      await channel1.send(embed=embed)
 
-    @commands.command(aliases=["pi"])
+    @commands.command(aliases=["w"])
     async def whois(self, ctx, member: discord.Member = None):
      if not member:  # if member is no mentioned
        member = ctx.message.author  # set member as the author
@@ -176,7 +176,7 @@ class Utilities(commands.Cog):
      region = str(ctx.guild.region)
      guild_id = str(ctx.guild.id)
      memberCount = str(ctx.guild.member_count)
-     icon = str(ctx.guild.icon_url)
+     icon = str(ctx.guild.icon)
      desc = ctx.guild.description
 
      embed = discord.Embed(title=ctx.guild.name + " Server Information",description=desc,colour=discord.Color.gold())

@@ -29,7 +29,7 @@ class Filter(commands.Cog):
          muted = discord.utils.get(message.guild.roles, name="Muted")
          hidmod = discord.utils.get(message.guild.roles, name="Hidden Moderator || HR")
          channel1 = discord.utils.get(message.guild.text_channels, name="mod-logs")
-         modaton = discord.utils.get(message.guild.roles, name="Modaton")
+         rrrrrr = discord.utils.get(message.guild.roles, name="rrrrrr")
          n = datetime.datetime.now(timezone.utc)
          day = n.strftime("%A %d %B %Y")
          tim = n.strftime("%H:%M.%S | Timezone: %Z")
@@ -40,7 +40,9 @@ class Filter(commands.Cog):
          elif message.channel.id == 859608400811130900:
            return 
          
-
+         elif rrrrrr in message.author.roles:
+           while True:
+             return
 
          elif role in message.author.roles:
           while True:
@@ -49,9 +51,6 @@ class Filter(commands.Cog):
          elif hidmod in message.author.roles:
           while True:
              return    
-
-         elif modaton in message.author.roles:
-           return
 
          elif message.author.guild_permissions.kick_members:
            while True:
@@ -73,9 +72,13 @@ class Filter(commands.Cog):
            await message.author.add_roles(muted)
            await message.channel.send(f"{message.author.mention} has been muted for a period of 1 hour for using a moderated word.")
            await asyncio.sleep(3600)
-           await message.author.remove_roles(muted)
-           await message.channel.send(f"{message.author.mention} has been unmuted. Do not use moderated words again.")
-           return
+           if muted in message.author.roles:
+             while True:
+               await message.author.remove_roles(muted)
+               await message.channel.send(f"{message.author.mention} has been unmuted. Do not use moderated words again.")
+               return
+           else:
+             return  
       
       
 
