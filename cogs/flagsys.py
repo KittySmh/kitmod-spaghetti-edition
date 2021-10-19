@@ -35,12 +35,12 @@ class flagsys(commands.Cog):
           return  
     
     @commands.command(aliases=["blw"])
-    async def blacklist(ctx, word):
+    async def blacklist(self, ctx, word):
       if ctx.author.id == 484318483258015754:
        while True:
-         with open("flagsystem.txt", "r+") as file:
-           await ctx.reply(f"The Word **{word}** has been added to **BadWords.txt**")
+         with open("BadWords.txt", "r+") as file:
            file.write(f"{word} ")
+           await ctx.reply(f"The Word **{word}** has been added to **BadWords.txt**")
            return
 
       else:

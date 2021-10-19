@@ -34,7 +34,7 @@ class Helpcmd(commands.Cog):
 
       ).set_thumbnail(
         url=
-        'https://media.discordapp.net/attachments/835359268432773133/863792001065811978/SVPM_Logo_2.jpg?width=415&height=468')
+        '')
 
       await ctx.send(embed=help)
    
@@ -277,9 +277,7 @@ class Helpcmd(commands.Cog):
             await message.edit(embed=pages[i])
 
         try:
-            reaction, user = await self.bot.wait_for('reaction_add',
-                                                   timeout=30.0,
-                                                   check=check)
+            reaction, user = await self.bot.wait_for('reaction_add',timeout=30.0,check=check)
             await message.remove_reaction(reaction, user)
         except:
             break

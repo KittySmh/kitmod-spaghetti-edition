@@ -1,3 +1,12 @@
 {
-  "files": {}
+  "files": {
+    "cogs/sniper.py": [
+      {
+        "id": "fcc91e3c-020d-42f5-ae2d-9a885b35e7af",
+        "line": 12,
+        "version": 495,
+        "index": 155
+      }
+    ]
+  }
 }

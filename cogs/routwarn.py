@@ -17,7 +17,7 @@ class routwarn(commands.Cog):
         embed= discord.Embed(title="Kind Routine Warning!", description = "Do not use any bad/NSFW words anywhere except for <#859608400811130900> !",timestamp=datetime.datetime.now()
         ).set_footer(text="Ignoring this will result in a moderation.")
         channel = discord.utils.get(self.bot.get_all_channels(), guild__name = 'GalaxyBlox_YT Community!!!', name = 'chat')
-        await channel.send(embed=embed)
+        nutz = await channel.send(embed=embed)
 
 def setup(bot):
     bot.add_cog(routwarn(bot))      

@@ -69,7 +69,7 @@ class Utilities(commands.Cog):
      if not member:  # if member is no mentioned
        member = ctx.message.author  # set member as the author
      roles = [role for role in member.roles]
-     embed = discord.Embed(colour=discord.Colour.gold(),timestamp=ctx.message.created_at,title=f"User Info - {member}")
+     embed = discord.Embed(colour=ctx.author.color,timestamp=ctx.message.created_at,title=f"User Info - {member}")
      embed.set_thumbnail(url=member.display_avatar)
      embed.set_footer(text=f"Requested by {ctx.author}")
 
@@ -79,7 +79,18 @@ class Utilities(commands.Cog):
      embed.add_field(name="Created Account On:",value=member.created_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"),inline=False)
      embed.add_field(name="Joined Server On:",value=member.joined_at.strftime("%a, %#d %B %Y, %I:%M %p UTC"),inline=False)
 
-     embed.add_field(name="Currently:", value=(member.status), inline=False)
+     if str(member.status) == "dnd":
+       status = "Do Not Disturb <:dnd:894389291898273832>"
+     elif str(member.status) == "idle":
+         status = "Idle <:idle:894389291982139412>"
+     elif str(member.status) == "online":
+       status = "Online <:online:894389291986333777>"
+     elif str(member.status) == "streaming":
+       status = "Streaming <:streaming:894389292099575830>" 
+     elif str(member.status) == "offline":
+       status = "Offline <:offline:894389292107989082>"   
+     
+     embed.add_field(name="Currently:", value=f"{status}", inline=False)
 
      embed.add_field(name="Roles:", value="".join([role.mention for role in roles]),inline=False)
      embed.add_field(name="Highest Role:", value=member.top_role.mention)
@@ -179,7 +190,7 @@ class Utilities(commands.Cog):
      icon = str(ctx.guild.icon)
      desc = ctx.guild.description
 
-     embed = discord.Embed(title=ctx.guild.name + " Server Information",description=desc,colour=discord.Color.gold())
+     embed = discord.Embed(title=ctx.guild.name + " Server Information",description=desc,colour=ctx.author.color)
      embed.set_thumbnail(url=icon)
      embed.add_field(name="Precinct",value="Precinct 21 District",inline=False)
      embed.add_field(name="Owner", value=owner, inline=False)

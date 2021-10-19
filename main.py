@@ -1,46 +1,98 @@
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 import os
 from keep_alive import keep_alive
 import asyncio
 import aiosqlite
+import random
 
 
 
-intents = discord.Intents.all()
+intents = discord.Intents.default()
+intents.members = True
+intents.typing = True
+intents.presences = True
+
 bot = commands.Bot(command_prefix="s!", intents=intents)
 
-
+errmsg = [1, 2, 3, 4]
 
 @bot.command()
-@commands.guild_only()
-@commands.is_owner()
 async def load(ctx, extension):
-  try:  
-    bot.load_extension(f"cogs.{extension}")
-    await ctx.reply(f"The **{extension}** Extension has been loaded! 👍")
+  if ctx.author.id == 484318483258015754:
+   while True:
+     try:  
+       bot.load_extension(f"cogs.{extension}")
+       await ctx.reply(f"The **{extension}** Extension has been loaded! 👍")
+       return
   
-  except:
-    await ctx.reply("Either Something went wrong or the extension is not unloaded")
+     except:
+       await ctx.reply("Either Something went wrong or the extension is not unloaded")
+       return
+  else:
+    if random.choice(errmsg) == 1:
+      await ctx.reply("Congrats! You have discovered a command that's useless to you! ||*sarcasm!*||") 
+      return  
+    elif random.choice(errmsg) == 2:
+      await ctx.reply("Dude, you do know that this command is restricted to devs?")
+      return
+    elif random.choice(errmsg) == 3:
+      await ctx.reply("ERROR: You Do Not Have Access To This Command. <:nopp:865257334191030273>")
+      return 
+    elif random.choice(errmsg) == 4:
+      await ctx.reply("You Do not have permission to run the command: **load**")  
+      return 
 
 @bot.command(aliases=['UNLOAD'])
-@commands.guild_only()
-@commands.is_owner()
 async def unload(ctx, extension):
-  try:
-    bot.unload_extension(f"cogs.{extension}")
-    await ctx.reply(f"The **{extension}** Extension has been unloaded! 👍")
-  except:
-    await ctx.reply("Either Something went wrong or the extension is not loaded")
-
+  if ctx.author.id == 484318483258015754:
+   while True:
+    try:
+     bot.unload_extension(f"cogs.{extension}")
+     await ctx.reply(f"The **{extension}** Extension has been unloaded! 👍")
+     return
+    except:
+     await ctx.reply("Either Something went wrong or the extension is not loaded")
+     return
+  else:
+    if random.choice(errmsg) == 1:
+      await ctx.reply("Congrats! You have discovered a command that's useless to you! ||*sarcasm!*||") 
+      return  
+    elif random.choice(errmsg) == 2:
+      await ctx.reply("Dude, you do know that this command is restricted to devs?")
+      return
+    elif random.choice(errmsg) == 3:
+      await ctx.reply("ERROR: You Do Not Have Access To This Command. <:nopp:865257334191030273>")
+      return
+    elif random.choice(errmsg) == 4:
+      await ctx.reply("You Do not have permission to run the command: **unload**")
+      return
+    
 
 @bot.command(aliases=['RELOAD'])
-@commands.guild_only()
-@commands.is_owner()
 async def reload(ctx, extension):
-    bot.reload_extension(f"cogs.{extension}")
-    await ctx.reply(f"The **{extension}** Extension has been reloaded! 👍")
-
+  if ctx.author.id == 484318483258015754:
+   while True: 
+    try: 
+     bot.reload_extension(f"cogs.{extension}")
+     await ctx.reply(f"The **{extension}** Extension has been reloaded! 👍")
+     return
+    except:
+      await ctx.reply("Something Went Wrong...")
+      return
+  else:
+    if random.choice(errmsg) == 1:
+      await ctx.reply("Congrats! You have discovered a command that's useless to you! ||*sarcasm!*||")   
+      return
+    elif random.choice(errmsg) == 2:
+      await ctx.reply("Dude, you do know that this command is restricted to devs?")
+      return
+    elif random.choice(errmsg) == 3:
+      await ctx.reply("ERROR: You Do Not Have Access To This Command. <:nopp:865257334191030273>") 
+      return
+    elif random.choice(errmsg) == 4:
+      await ctx.reply("You Do not have permission to run the command: **reload**")    
+      return
 
 
 for filename in os.listdir('./cogs'):

@@ -14,27 +14,26 @@ class warnings(commands.Cog):
     async def warn(self, ctx, member:discord.Member, *, reason):
         role = discord.utils.get(ctx.guild.roles, name="Override Perms")
         hidmod = discord.utils.get(ctx.guild.roles, name="Hidden Moderator || HR")
-        modaton = discord.utils.get(ctx.guild.roles, name="Modaton")
         channel1 = discord.utils.get(ctx.guild.text_channels, name="mod-logs")
         warndb = await aiosqlite.connect("warnData.db")
-        if role in member.roles:
-          while True:
-             await ctx.reply("I am not allowed to warn this user.")
-             return
-
+        
+        if member == ctx.author:
+            await ctx.reply("Why are you trying to warn yourself....??")
+            return
+        
         elif hidmod in member.roles:
           while True:
             await ctx.reply("I am not allowed to warn this user.")
             return  
-        
-        elif modaton in member.roles:
-          while True:
-            await ctx.reply("I am not allowed to warn this user.")
-            return
 
-        elif member == ctx.author:
-            await ctx.reply("Why are you trying to warn yourself....??")
-            return
+        elif member.guild_permissions.kick_members:
+         await ctx.reply("User has mod perms. I am unable to warn them.")    
+         return
+
+        elif role in member.roles:
+          while True:
+             await ctx.reply("I am not allowed to warn this user.")
+             return
         
         else:
             await warndb.execute('INSERT OR IGNORE INTO warningsData (guild_id, admin_id, user_id, reason) VALUES (?,?,?,?)', (ctx.guild.id, ctx.author.id, member.id, reason))
@@ -54,7 +53,7 @@ class warnings(commands.Cog):
     @commands.command()
     @commands.guild_only()
     @commands.has_role("Override Perms")
-    async def unwarn(self, ctx, member:discord.Member):
+    async def clearwarns(self, ctx, member:discord.Member):
         channel1 = discord.utils.get(ctx.guild.text_channels, name="mod-logs")
         warndb = await aiosqlite.connect("warnData.db")
         if member == ctx.author:

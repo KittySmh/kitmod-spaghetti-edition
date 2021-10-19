@@ -15,7 +15,7 @@ class BotConfig(commands.Cog):
      if ctx.message.author.id == 484318483258015754:
         while True:
             await ctx.send('Code 4 on the scene. 19-2 Calling it a night.')
-            await self.bot.close()
+            await self.logout()
         else:
             await ctx.reply(
                 '<:nopp:865257334191030273> Hey! This is restricted to SVPM HICOMs only!'
@@ -26,8 +26,8 @@ class BotConfig(commands.Cog):
      if ctx.message.author.id == 484318483258015754:
         while True:
             await ctx.send('Restart SPVM Systems. Please Stand By...')
-            await self.bot.close()
-            await self.bot.run(token)
+            await self.bot.logout()
+            await self.bot.login(token)
         else:
             await ctx.reply(
                 '<:nopp:865257334191030273> Hey! This is restricted to SVPM HICOMs only!'

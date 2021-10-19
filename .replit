@@ -1,6 +1,8 @@
 language="python3"
 run = """
 pip install -U git+https://github.com/Pycord-Development/pycord
+pip install googletrans
+pip install covid
 python main.py
 """
 
