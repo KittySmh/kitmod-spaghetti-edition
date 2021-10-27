@@ -19,6 +19,7 @@ class flg(commands.Cog):
       skam="https://dlcsorcl.com"
       hidmod = discord.utils.get(message.guild.roles, name="Hidden Moderator || HR")
       role = discord.utils.get(message.guild.roles, name="Override Perms")
+      bots = discord.utils.get(message.guild.roles, name="Bots")
       admLR = discord.utils.get(message.guild.roles, name="Moderator || LR")
       admMR = discord.utils.get(message.guild.roles, name="Moderator || MR")
       admHR = discord.utils.get(message.guild.roles, name="Moderator || HR")
@@ -33,6 +34,8 @@ class flg(commands.Cog):
           return
         elif role in message.author.roles:
           return  
+        elif bots in message.author.roles:
+          return
         else:
           await message.delete()
           await message.author.ban(delete_message_days=7)

@@ -126,7 +126,7 @@ class Moderation(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(ctx, *, member):
+    async def unban(self, ctx, *, member):
      banned_users = await ctx.guild.bans()
      member_name, member_discriminator = member.split("#")
 
@@ -148,7 +148,6 @@ class Moderation(commands.Cog):
      channel1 = discord.utils.get(ctx.guild.text_channels, name="mod-logs")
      role = discord.utils.get(ctx.guild.roles, name="Override Perms")
      hidmod = discord.utils.get(ctx.guild.roles, name="Hidden Moderator")
-     inv = await ctx.channel.create_invite(max_uses=1)
      
      if user == None:
        await ctx.reply("Mention a user please!")

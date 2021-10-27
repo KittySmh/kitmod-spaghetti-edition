@@ -5,7 +5,8 @@ from keep_alive import keep_alive
 import asyncio
 import aiosqlite
 import random
-
+from discord.ext import commands
+from discord_together import DiscordTogether
 
 
 intents = discord.Intents.default()
@@ -15,6 +16,8 @@ intents.presences = True
 
 bot = commands.Bot(command_prefix="s!", intents=intents)
 
+
+token=os.getenv("TOKEN")
 errmsg = [1, 2, 3, 4]
 
 @bot.command()
@@ -117,5 +120,4 @@ async def on_ready():
 
 keep_alive()
 bot.loop.create_task(warninit())
-token=os.getenv("TOKEN")
 bot.run(token)        

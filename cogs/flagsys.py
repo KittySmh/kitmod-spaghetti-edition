@@ -40,6 +40,7 @@ class flagsys(commands.Cog):
        while True:
          with open("BadWords.txt", "r+") as file:
            file.write(f"{word} ")
+           self.bot.reload_extension(f"cogs.filter")
            await ctx.reply(f"The Word **{word}** has been added to **BadWords.txt**")
            return
 
