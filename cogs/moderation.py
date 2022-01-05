@@ -1,4 +1,3 @@
-
 from discord.ext import commands
 import re
 import datetime
@@ -121,22 +120,24 @@ class Moderation(commands.Cog):
          await member.kick(reason=reason)
          await channel1.send(embed=embed)
 
+    
+
 
 
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(self, ctx, *, member):
-     banned_users = await ctx.guild.bans()
-     member_name, member_discriminator = member.split("#")
-
-     for ban_entry in banned_users:
-        user = ban_entry.user
-
-        if (user.name, user.discriminator) == (member_name, member_discriminator):
-            await ctx.guild.unban(user)
-            await ctx.send(f'Unbanned {user.mention}')
-            return  
+    async def unban(self, ctx, member,*, reason = "No reason provided."):
+      m = await self.bot.fetch_user(member)
+      embed = discord.Embed(title = "User Unbanned", description = f"{m.name} has been unbanned. ",timestamp=datetime.datetime.now(),colour=discord.Colour.green())
+      embed.set_thumbnail(url=m.avatar)
+      embed.add_field(name="Moderator:", value=f"{ctx.author}", inline=True)
+      embed.add_field(name="Reason", value=f"{reason}")
+      channel1 = discord.utils.get(ctx.guild.text_channels, name="mod-logs")
+      await ctx.guild.unban(m)
+      await ctx.send(f"{m.name} has been unbanned from **{ctx.guild.name}**")
+      await channel1.send(embed=embed)
+      
     
     @commands.command(pass_context=True)
     @commands.has_permissions(kick_members=True)
@@ -256,11 +257,11 @@ class Moderation(commands.Cog):
      try: 
        await member.send(f"You have been placed on a timed ban in {ctx.guild.name} for {duration}.")
        await asyncio.sleep(bantime)
-       await member.unban(reason="TBan Duration Reached.")
+       await member.unban()
        return
      except:
        await asyncio.sleep(bantime)
-       await member.unban(reason="TBan Duration Reached.")
+       await member.unban()
        return   
 
     

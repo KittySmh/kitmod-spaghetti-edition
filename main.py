@@ -3,6 +3,7 @@ from discord.ext import commands
 import os
 from keep_alive import keep_alive
 import asyncio
+import requests
 import aiosqlite
 import random
 from discord.ext import commands
@@ -98,9 +99,11 @@ async def reload(ctx, extension):
       return
 
 
+
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
       bot.load_extension(f'cogs.{filename[:-3]}')
+      print(f"{filename[:-3]} Extension Loaded!")
         
 
 async def warninit():
@@ -116,7 +119,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Activity(
         type=discord.ActivityType.listening, name='SPVM Radio Comms!'))
         
-  
+ 
 
 keep_alive()
 bot.loop.create_task(warninit())

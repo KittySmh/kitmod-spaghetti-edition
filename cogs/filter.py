@@ -29,7 +29,7 @@ class Filter(commands.Cog):
        if word in message.content:
          role = discord.utils.get(message.guild.roles, name="Override Perms")
          muted = discord.utils.get(message.guild.roles, name="Muted")
-         hidmod = discord.utils.get(message.guild.roles, name="Hidden Moderator || HR")
+         hidmod = discord.utils.get(message.guild.roles, name="Moderation Advisor")
          channel1 = discord.utils.get(message.guild.text_channels, name="mod-logs")
          rrrrrr = discord.utils.get(message.guild.roles, name="rrrrrr")
          warndb = await aiosqlite.connect("warnData.db")
@@ -63,8 +63,9 @@ class Filter(commands.Cog):
          elif message.author.guild_permissions.kick_members:
            while True:
              with open("flagsystem.txt", "r+") as file:
-               await message.channel.send(f"Flag Added for {message.author.display_name}.")
+               await message.channel.send(f"{message.author.display_name} has been flagged for prohibited word usage.")
                file.write(f"{message.author} - {message.content}. Time of Flag = {day}, Date of Flag: {tim}\n")
+               await message.delete()
                for lines in file:
                  return
                  if lines.strip("\n") == str(message.author.id):
@@ -74,22 +75,33 @@ class Filter(commands.Cog):
          else:
            await warndb.execute('INSERT OR IGNORE INTO warningsData (guild_id, admin_id, user_id, reason) VALUES (?,?,?,?)', (message.guild.id, 862535022841561108, message.author.id, reason))
            await warndb.commit()
-           embed = discord.Embed(title = "User Muted", description = f"{message.author} has been muted for using a moderated word ({message.content})",timestamp=datetime.datetime.now(),
+           embed = discord.Embed(title = "User Muted", description = f"{message.author} has been muted for using a prohibited word ({message.content})",timestamp=datetime.datetime.now(),
            colour=discord.Colour.red())
            embed.set_thumbnail(url=message.author.display_avatar)
            await channel1.send(embed=embed)
            await message.delete()
-           await message.author.send(embed=ep)
-           await message.author.add_roles(muted)
-           await message.channel.send(f"{message.author.mention} has been muted for a period of 1 hour for using a moderated word.")
-           await asyncio.sleep(3600)
-           if muted in message.author.roles:
-             while True:
-               await message.author.remove_roles(muted)
-               await message.channel.send(f"{message.author.mention} has been unmuted. Do not use moderated words again.")
-               return
-           else:
-             return  
+           try:
+             await message.author.send(embed=ep)
+             await message.author.add_roles(muted)
+             await message.channel.send(f"{message.author.mention} has been muted for a period of 1 hour for using a prohibited word.")
+             await asyncio.sleep(3600)
+             if muted in message.author.roles:
+               while True:
+                 await message.author.remove_roles(muted)
+                 return
+             else:
+               return  
+           except:
+             await message.author.add_roles(muted)
+             await message.channel.send(f"{message.author.mention} has been muted for a period of 1 hour for using a moderated word.")
+             await asyncio.sleep(3600)
+             if muted in message.author.roles:
+               while True:
+                 await message.author.remove_roles(muted)
+                 return
+             else:
+               return  
+
       
       
 

@@ -1,19 +1,27 @@
 {
   "files": {
+    ".replit": [
+      {
+        "id": "d35602f4-fd41-4185-8545-97bdd352da13",
+        "line": 1,
+        "version": 64,
+        "index": 0
+      }
+    ],
     "cogs/sniper.py": [
       {
         "id": "fcc91e3c-020d-42f5-ae2d-9a885b35e7af",
         "line": 12,
-        "version": 1,
+        "version": 13,
         "index": 155
       }
     ],
     "main.py": [
       {
         "id": "8978662c-fb4a-4de2-b789-dbab62c7adc2",
-        "line": 122,
-        "version": 29,
-        "index": 3957
+        "line": 1,
+        "version": 125,
+        "index": 0
       }
     ]
   }

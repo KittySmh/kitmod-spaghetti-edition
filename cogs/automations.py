@@ -6,7 +6,7 @@ import time
 from datetime import timezone
 import json
 
-class Rrole(commands.Cog):
+class automations(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -42,4 +42,4 @@ class Rrole(commands.Cog):
 
 
 def setup(bot):
-  bot.add_cog(Rrole(bot))   
+  bot.add_cog(automations(bot))   

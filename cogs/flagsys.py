@@ -11,7 +11,7 @@ class flagsys(commands.Cog):
     @commands.command()
     async def modflags(self, ctx):
      
-      hidmod = discord.utils.get(ctx.guild.roles, name="Hidden Moderator")
+      hidmod = discord.utils.get(ctx.guild.roles, name="Moderation Supervisor || SHR")
       role = discord.utils.get(ctx.guild.roles, name="Override Perms")
 
       with open('flagsystem.txt', 'r') as f:

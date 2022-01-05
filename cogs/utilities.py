@@ -165,19 +165,20 @@ class Utilities(commands.Cog):
        await ctx.reply("I might not have the perms to do so, **OR** the slowmode has been setted.")
 
     @commands.command(aliases=["av"])
-    async def avatar(self, ctx, member: discord.Member = None):
+    async def avatar(self, ctx, member = None):
      if member == None:
-        member = ctx.author
+        member = ctx.author.id
 
-     icon_url = member.display_avatar
+     n = await self.bot.fetch_user(member)
+     
 
-     avatarEmbed = discord.Embed(title=f"{member.name}\'s Avatar",colour=ctx.author.color)
+     avatarEmbed = discord.Embed(title=f"{n.name}\'s Avatar",colour=ctx.author.color)
 
-     avatarEmbed.set_image(url=f"{icon_url}")
+     avatarEmbed.set_image(url=f"{n.avatar}")
 
      avatarEmbed.timestamp = ctx.message.created_at
      avatarEmbed.set_footer(
-        text="SPVM Systems 2021® All Rights Reserved.")
+        text="Requested by "+ ctx.author.name)
 
      await ctx.send(embed=avatarEmbed)
  
@@ -192,12 +193,11 @@ class Utilities(commands.Cog):
 
      embed = discord.Embed(title=ctx.guild.name + " Server Information",description=desc,colour=ctx.author.color)
      embed.set_thumbnail(url=icon)
-     embed.add_field(name="Precinct",value="Precinct 21 District",inline=False)
      embed.add_field(name="Owner", value=owner, inline=False)
      embed.add_field(name="Server ID", value=guild_id, inline=False)
      embed.add_field(name="Region", value=region, inline=False)
      embed.add_field(name="Member Count", value=memberCount, inline=False)
-     embed.set_footer(text="SPVM Systems 2021® All Rights Reserved.")
+     embed.set_footer(text="Requested by "+ ctx.author.name)
      await ctx.reply(embed=embed)
 
 def setup(bot):

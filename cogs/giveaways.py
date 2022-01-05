@@ -4,6 +4,7 @@ import datetime
 import random
 import os
 import asyncio
+import time
 
 class Giveaways(commands.Cog):
     def __init__(self, bot):
@@ -16,17 +17,19 @@ class Giveaways(commands.Cog):
     async def gstart(self, ctx, duration, *, prize: str):
      converter = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
      giveawaytime = int(duration[0]) * converter[duration[-1]]
-     embed = discord.Embed(title="Giveaway! :tada:",
-     description=f"{prize}",color=ctx.author.color)
+     embed = discord.Embed(title="Active Giveaway! :tada:",
+     description=f"Prize:\n{prize}")
+     date = datetime.datetime.now()
+     utc_time = time.mktime(date.timetuple())
 
     
 
-     embed.add_field(name="Ends In:", value=f"{duration}")
-
+     embed.add_field(name="Ends In:", value=f"**{duration}**\nGiveaway started on <t:{utc_time}:>")
+     
+     poopy = await ctx.send('||@here|| Active Giveaway Going on! :tada:')
      my_msg = await ctx.send(embed=embed)
      await my_msg.add_reaction("🎉")
-     poopy = await ctx.send('||@here|| Active Giveaway Going on! :tada:')
-    
+     
      await asyncio.sleep(giveawaytime)
 
      new_msg = await ctx.channel.fetch_message(my_msg.id)
@@ -37,7 +40,8 @@ class Giveaways(commands.Cog):
 
      winner = random.choice(users)
 
-     await ctx.send(f"Congratulations! {winner} won {prize}! :tada:")
+     await ctx.send(f"Congratulations! {winner.mention} has won **{prize}**! :tada:")
+     await my_msg.clear_reaction("🎉")
      await poopy.edit(content='The Giveaway Has Ended. Tune in Next Time For More Exciting Giveaways!')
 
 
@@ -54,7 +58,7 @@ class Giveaways(commands.Cog):
 
      winner = random.choice(users)
 
-     await channel.send(f"Congratulations the new winner is: {winner.mention} for the recent giveaway! :tada:")
+     await channel.send(f"The new winner is: {winner.mention} for the recent giveaway! Congratulations! :tada:")
 
 
 def setup(bot):

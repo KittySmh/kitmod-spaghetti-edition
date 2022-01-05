@@ -5,6 +5,7 @@ pip install googletrans
 pip install covid
 pip install discord-together
 pip install -U pip
+pip install datetime
 python main.py
 """
 

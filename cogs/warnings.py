@@ -13,7 +13,7 @@ class warnings(commands.Cog):
     @commands.has_permissions(kick_members=True)
     async def warn(self, ctx, member:discord.Member, *, reason):
         role = discord.utils.get(ctx.guild.roles, name="Override Perms")
-        hidmod = discord.utils.get(ctx.guild.roles, name="Hidden Moderator || HR")
+        hidmod = discord.utils.get(ctx.guild.roles, name="Moderation Supervisor || SHR")
         channel1 = discord.utils.get(ctx.guild.text_channels, name="mod-logs")
         warndb = await aiosqlite.connect("warnData.db")
         

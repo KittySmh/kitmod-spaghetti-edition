@@ -1,35 +1,37 @@
-import discord
 from discord.ext import commands
-import datetime
 import discord
-from discord.ext import commands
-import datetime
-import random
-import os
-import asyncio
-from googletrans import Translator
+import googletrans
+import io
 
 class translate(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.trans = googletrans.Translator()
 
-    @commands.command()
-    async def translate(self, ctx, lang = None, *, thing = None):
-     if lang == None:
-       await ctx.send("Please mention a language to translate into.")
-       return
-       
-     if thing == None:
-       await ctx.send("Please state what would you like me to translate.")
-       return
-     
-     translator = Translator()
-     translations = translator.translate(thing, dest=lang)
-     for translation in translations:
-       embed = discord.Embed(title="Google Translate Results", description="")
-       embed.add_field(name="Before", value=f"{translator.orgin}", inline=True)
-       embed.add_field(name="After",value=f"{translator.text}", inline=True)
-       await ctx.send(embed=embed)
+    @commands.command(hidden=True)
+    async def translate(self, ctx, *, message: commands.clean_content = None):
+        """Translates a message to English using Google translate."""
+
+        loop = self.bot.loop
+        if message is None:
+            ref = ctx.message.reference
+            if ref and isinstance(ref.resolved, discord.Message):
+                message = ref.resolved.content
+            else:
+                return await ctx.send('Missing a message to translate')
+
+        try:
+            ret = await loop.run_in_executor(None, self.trans.translate, message)
+        except Exception as e:
+            return await ctx.send(f'An error occurred: {e.__class__.__name__}: {e}')
+
+        embed = discord.Embed(title='Translated', colour=0x4284F3)
+        src = googletrans.LANGUAGES.get(ret.src, '(auto-detected)').title()
+        dest = googletrans.LANGUAGES.get(ret.dest, 'english').title()
+        embed.add_field(name=f'From {src}', value=ret.origin, inline=False)
+        embed.add_field(name=f'To {dest}', value=ret.text, inline=False)
+        await ctx.send(embed=embed)
+
 
 def setup(bot):
     bot.add_cog(translate(bot))       

@@ -9,6 +9,7 @@ from discord.ext import commands
 # of this class is called when the user changes their choice
 class Dropdown(discord.ui.Select):
     def __init__(self):
+        
 
         # Set the options that will be presented inside the dropdown
         options = [
@@ -32,27 +33,41 @@ class Dropdown(discord.ui.Select):
             max_values=1,
             options=options,
         )
-
-    async def select_callback(self, select, interaction):
-        # Use the interaction object to send a response message containing
-        # the user's favourite colour or choice. The self object refers to the
-        # Select object, and the values attribute gets a list of the user's
-        # selected options. We only want the first one.
-        print(self.values)
-        if self.values[0] == "Moderation":
-            await interaction.response.send_message('Moderation :eyes:', ephemeral=True)
-        elif self.values[0] == "Utilities":
-            await interaction.response.send_message('Utility :eyes:', ephemeral=True)
-        elif self.values[0] == "Miscellaneous":
-          await interaction.response.send_message('Misc :eyes:', ephemeral=True)    
+      
+    async def callback(self, interaction: discord.Interaction):
+         print(self.values[0])
+         if self.values[0] == "Moderation":
+            await interaction.response.send_message(content='Moderation :eyes:', ephemeral=True)
+         elif self.values[0] == "Utilities":
+            await interaction.response.send_message(content='Utility :eyes:', ephemeral=True)
+         elif self.values[0] == "Miscellaneous":
+          await interaction.response.send_message(content='Misc :eyes:', ephemeral=True)    
 
 
 class DropdownView(discord.ui.View):
-    def __init__(self):
+    def __init__(self, ctx):
+        self.context = ctx
         super().__init__()
+        super().__init__(timeout=60)
 
+        async def interaction_check(self, interaction: discord.Interaction):
+         if interaction.user != self.context.author:
+            return True
+            await interaction.response.send_message(content='Not yours man...', ephemeral=True) 
+         else:
+           return False
+
+        async def on_timeout(self):
+         for child in self.children:
+            child.disabled = True
+            
+         await self.message.edit(view=self)
+  
+        
+       
         # Adds the dropdown to our view object.
         self.add_item(Dropdown())
+        self.add_item(discord.ui.Button(label='Join the support server!', url='https://discord.gg/CrpzQKEVWV', style=discord.ButtonStyle.url))
 
 class Halp(commands.Cog):
     def __init__(self, bot):
@@ -61,8 +76,9 @@ class Halp(commands.Cog):
     @commands.command()
     @commands.is_owner()
     async def halp(self,ctx):
-      view = DropdownView()
-      await ctx.send(embed=discord.Embed(description="Select an option to get started!").set_author(name=f"SPVM Public Assistance Office", icon_url=str("https://media.discordapp.net/attachments/835359268432773133/863792001065811978/SVPM_Logo_2.jpg?width=415&height=468")).add_field(name="• Moderation",value="Displays Moderation Commands",inline=False).add_field(name="• Utilities",value="Displays Commands in the Utilities Category",inline=False).add_field(name="• Miscellaneous",value="Displays Commands in the Miscellaneous Category",inline=False),view=view)
+      view = DropdownView(ctx)
+      
+      view.message = await ctx.send(embed=discord.Embed(description="Select an option to get started!").set_author(name=f"KitMod Help Centre", icon_url=str("https://media.discordapp.net/attachments/927900309236371546/928264110058135572/KidModLogo.png?width=631&height=473")).add_field(name="• Moderation",value="Displays Moderation Commands",inline=False).add_field(name="• Utilities",value="Displays Commands in the Utilities Category",inline=False).add_field(name="• Miscellaneous",value="Displays Commands in the Miscellaneous Category",inline=False),view=view)
 
           
 

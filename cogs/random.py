@@ -6,21 +6,37 @@ import os
 from discord import Spotify
 import asyncio
 import requests
-
-
+import re
+from datetime import timedelta
 
 determine_flip = [1, 0]
 
+
+      
 class Random(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
     @commands.command()
+    @commands.is_owner()
     async def verifyembed(self,ctx):
-      embed = discord.Embed(title="Welcome to **GalaxyBlox_YT Community!!!**",description="By joining this server, you agree to the rules. \n** **\nRules can be found in __<#781115907644719104>__")
+      embed = discord.Embed(title=f"Welcome to **{ctx.guild.name}**",description="By joining this server, you agree to the rules. \n** **\nRules can be found in __<#781115907644719104>__")
       dan = await ctx.send(embed=embed)
       await dan.add_reaction("✅")
       return
+  
+    @commands.command()
+    async def rroles(self,ctx):
+      embed = discord.Embed(title="⚔️ Reaction Roles ⚔️", description = "__Roles__\n• Pro Gamer = 🎮\n• Pro Music Producer = 🎵\n• Pro Editor = 💻\n• Pro Bedwars Player = 🛏️\n• GBYT Bedwars Clan = 👀")
+      hoe = await ctx.send(embed=embed)
+      await hoe.add_reaction("🎮")
+      await hoe.add_reaction("🎵")
+      await hoe.add_reaction("💻")
+      await hoe.add_reaction("🛏️")
+      await hoe.add_reaction("👀")
+      
+      await ctx.message.delete()
+      await ctx.sennd(embed=embed)
 
     @commands.command()
     async def weather(self, ctx, *, city: str):
@@ -137,18 +153,20 @@ class Random(commands.Cog):
            await d.delete()
            await ctx.message.delete()
            return
-         else:
-           if msg == None:
+          
+         elif msg == None:
              g = discord.Embed(description="Do the command again. But **State What you would like to be sent** to the user!",color=discord.Colour.red()).set_author(name="ERROR", icon_url=str(ctx.author.display_avatar))
              c = await ctx.reply(embed=g)
              await asyncio.sleep(30)
              await c.delete()
              await ctx.message.delete()
              return
-           else:
+         else:
              try:
                await member.send(msg) 
-               b = await ctx.reply("Message Sent!")
+               t = discord.Embed(description="Message **Successfully Sent**!",color=discord.Colour.green()).set_author(name="SUCCESS", icon_url=str(ctx.author.display_avatar))
+               t.add_field(title="Message Content", value=msg)
+               b = await ctx.send(embed=t)
                await asyncio.sleep(30)
                await b.delete()
                await ctx.message.delete()
@@ -160,35 +178,63 @@ class Random(commands.Cog):
                await a.delete()
                await ctx.message.delete()
                return
-       else:
-         await ctx.reply("You Don't Have Access To This Command.",delete_after=10) 
-
+     else:
+        await ctx.reply("You don't have access to this command.",delete_after=10) 
+    
     @commands.command()
-    async def spotify(self, ctx, user: discord.Member = None):
-     if user == None:
-        user = ctx.author
+    async def spotify(self, ctx, user: discord.Member=None):
+     user = user if user else ctx.author
 
-     if user.activities:
-        for activity in user.activities:
-          if isinstance(activity, Spotify):
-            while True:
-                embed = discord.Embed(
-                    title=
-                    f"{user.name}'s Current Spotify Soundtrack  <:Spotifyyyy:866309114543865867>",
-                    description="Listening to **{}**".format(activity.title),
-                    color=activity.colour) 
-                embed.set_thumbnail(url=activity.album_cover_url)
-                embed.add_field(name="Artist", value=str(activity.artists),inline=True)
-                embed.add_field(name="Album", value=activity.album,inline=True)
-                embed.add_field(name="Spotify Party ID",value=f"||{activity.party_id}||",inline=True)
-                embed.add_field(name="Listen Here!", value=activity.track_url,inline=False)
-                embed.set_footer(text="Started listening to spotify on {} UTC".format(activity.created_at.strftime("%H:%M")))
-                await ctx.send(embed=embed)
-                return
+     activity = None
 
-            else:
-             await ctx.send("It may have appears that you aren't listening to **Spotify**<:Spotifyyyy:866309114543865867> right now. Perhaps give it a shot at: https://www.spotify.com/ ???")
-             return
+     for act in user.activities:
+      if isinstance(act, Spotify):
+        activity = act
+        break
+      
+     if activity:
+      embed = discord.Embed(
+        title=f"{user.name}'s Spotify Details <:logo:904559253317091360>",
+        description="Currently listening to **{}**".format(activity.title),
+        color=activity.color
+      )
+
+      embed.set_thumbnail(url=activity.album_cover_url)
+      artist = str(activity.artists)
+      splitartist = artist.replace("[","").replace("]","").replace("'","").replace("'","")
+      embed.add_field(
+        name="Artist", 
+        value=splitartist,
+        inline=False
+      )
+
+      embed.add_field(
+        name="Album", 
+        value=activity.album,
+        inline=False
+      )
+      
+      m1, s1 = divmod(int(activity.duration.seconds), 60)
+
+      song_length = f'{m1}:{s1}'
+
+      embed.add_field(
+        name="Song Duration",
+        value=song_length,
+        inline=True
+      )                   
+      embed.add_field(
+        name="Track Link", 
+        value=f"[{activity.title}](https://open.spotify.com/track/{activity.track_id})",
+        inline=True
+      )
+
+      embed.set_footer(text=f'Requested by: {ctx.author}', icon_url=ctx.author.display_avatar)
+      
+      await ctx.send(embed=embed)
+
+     else:
+      await ctx.send(f'{user.name} is not listening to spotify currently.')
 
     @commands.command()
     async def comms(self, ctx):
@@ -196,15 +242,17 @@ class Random(commands.Cog):
         f'**SVPM Radio Comms Latency** = {round(self.bot.latency * 1000)} ms')
     
     @commands.command()
-    async def banner(self,ctx,member:discord.Member = None):
+    async def banner(self,ctx,member = None):
 
       if member == None:
-        member = ctx.author
+        member = ctx.author.id
 
-      user = await self.bot.fetch_user(member.id)
+      user = await self.bot.fetch_user(member)
       banner = user.banner.url
 
-      embed = discord.Embed(title=f"{member.mention}'s Banner", description="",timestamp=datetime.datetime.now(),colour=discord.Colour.gold().set_thumbnail(banner))
+      embed = discord.Embed(title=f"{user.name}'s Banner", description="",timestamp=datetime.datetime.now())
+      embed.set_footer(text="Requested by "+ ctx.author.name)
+      embed.set_image(url=banner)
 
       await ctx.send(embed=embed)
 
